@@ -1,0 +1,2 @@
+# Development-only tools. Never add runtime Odoo dependencies here.
+ruff

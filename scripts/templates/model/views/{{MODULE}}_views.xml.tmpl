@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_{{MODULE}}_{{ENTITY}}_list" model="ir.ui.view">
+        <field name="name">{{MODULE}}.{{ENTITY}}.list</field>
+        <field name="model">{{MODULE}}.{{ENTITY}}</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_{{MODULE}}_{{ENTITY}}_form" model="ir.ui.view">
+        <field name="name">{{MODULE}}.{{ENTITY}}.form</field>
+        <field name="model">{{MODULE}}.{{ENTITY}}</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_{{MODULE}}_{{ENTITY}}_search" model="ir.ui.view">
+        <field name="name">{{MODULE}}.{{ENTITY}}.search</field>
+        <field name="model">{{MODULE}}.{{ENTITY}}</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_{{MODULE}}_{{ENTITY}}" model="ir.actions.act_window">
+        <field name="name">{{TITLE}}</field>
+        <field name="res_model">{{MODULE}}.{{ENTITY}}</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_{{MODULE}}_root" name="{{TITLE}}" sequence="10"/>
+    <menuitem id="menu_{{MODULE}}_{{ENTITY}}" name="{{TITLE}}" parent="menu_{{MODULE}}_root"
+              action="action_{{MODULE}}_{{ENTITY}}" sequence="10"/>
+</odoo>

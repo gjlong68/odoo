@@ -1,0 +1,74 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/odoo-venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.indexing": true,
+  "python.analysis.exclude": [
+    "**/odoo-venv/**",
+    "**/backups/**",
+    "**/__pycache__/**",
+    "**/.git/**"
+  ],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": false,
+  "ruff.configuration": "${workspaceFolder}/ruff.toml",
+  "editor.formatOnSave": false,
+  "editor.rulers": [
+    120
+  ],
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.ruff_cache": true
+  },
+  "search.exclude": {
+    "**/odoo-venv": true,
+    "**/backups": true,
+    "**/.ruff_cache": true,
+    "**/__pycache__": true
+  },
+  "files.watcherExclude": {
+    "**/odoo-venv/**": true,
+    "**/backups/**": true
+  },
+  "files.associations": {
+    "*.xml": "xml"
+  },
+  "xml.format.enabled": true,
+  "xml.format.splitAttributes": false,
+  "xml.format.preserveEmptyContent": true,
+  "xml.validation.noGrammar": "ignore",
+  "terminal.integrated.env.linux": {
+    "ODOO_RC": "${workspaceFolder}/odoo20.conf"
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": false
+  },
+  "[xml]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[jsonc]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[toml]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  }
+}

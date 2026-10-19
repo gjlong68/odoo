@@ -1,0 +1,22 @@
+from odoo import fields, models
+
+
+class {{CLASS}}(models.Model):
+    _name = '{{MODULE}}.{{ENTITY}}'
+    _description = '{{TITLE}}'
+    _order = 'id desc'
+
+    name = fields.Char(string='Name', required=True, index=True)
+    active = fields.Boolean(default=True, index=True)
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        default=lambda self: self.env.company,
+        index=True,
+    )
+    note = fields.Text(string='Notes')
+
+    _name_company_uniq = models.Constraint(
+        'unique(name, company_id)',
+        'The name must be unique per company.',
+    )

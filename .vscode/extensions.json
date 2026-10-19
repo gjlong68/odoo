@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "charliemarsh.ruff",
+    "editorconfig.editorconfig",
+    "redhat.vscode-xml",
+    "tamasfe.even-better-toml",
+    "ms-ceintl.vscode-language-pack-zh-hans"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.black-formatter",
+    "ms-python.flake8"
+  ]
+}

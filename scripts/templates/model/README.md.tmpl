@@ -1,0 +1,27 @@
+# {{TITLE}}
+
+Odoo 20 custom module.
+
+## Dependencies
+
+`{{DEPENDS}}`
+
+## Install
+
+```bash
+make install MODULE={{MODULE}}
+```
+
+## Test
+
+```bash
+make test MODULE={{MODULE}}
+```
+
+## Structure
+
+- `models/{{ENTITY}}.py`: `{{MODULE}}.{{ENTITY}}` model
+- `security/{{MODULE}}_security.xml`: groups and privilege
+- `security/ir.access.csv`: Odoo 20 access rules
+- `views/{{MODULE}}_views.xml`: list/form/search views, action and menu
+- `tests/test_{{MODULE}}.py`: post-install tests

@@ -1,0 +1,85 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make:*)",
+      "Bash(odoo-venv/bin/python odoo-bin:*)",
+      "Bash(/opt/odoo20/odoo-venv/bin/python /opt/odoo20/odoo-bin:*)",
+      "Bash(odoo-venv/bin/python scripts/:*)",
+      "Bash(/opt/odoo20/odoo-venv/bin/python /opt/odoo20/scripts/:*)",
+      "Bash(ruff:*)",
+      "Bash(psql -d Goody:*)",
+      "Bash(psql -d demo:*)",
+      "Bash(psql -d Template:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Read(./odoo20.conf)",
+      "Read(//opt/odoo20/odoo20.conf)",
+      "Read(//etc/odoo20.conf)",
+      "Edit(./odoo/**)",
+      "Edit(//opt/odoo20/odoo/**)",
+      "Bash(sudo:*)",
+      "Bash(rm -rf:*)",
+      "Bash(dropdb:*)",
+      "Bash(odoo-venv/bin/python odoo-bin db drop:*)",
+      "Bash(/opt/odoo20/odoo-venv/bin/python /opt/odoo20/odoo-bin db drop:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/odoo-venv/bin/python\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_paths.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/odoo-venv/bin/python\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_bash.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/odoo-venv/bin/python\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/post_edit.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/odoo-venv/bin/python\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/session_context.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

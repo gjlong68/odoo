@@ -1,0 +1,258 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Odoo: Environment Check",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "env"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Run (dev=xml)",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "run",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Install Module",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "install",
+        "MODULE=${input:module}",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Update Module",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "update",
+        "MODULE=${input:module}",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Test Module",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "test",
+        "MODULE=${input:module}",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Check Module",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "validate",
+        "MODULE=${input:module}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Shell",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "shell",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Lint",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "lint"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: New Module",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "new-module",
+        "MODULE=${input:newModule}",
+        "KIND=${input:kind}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Backup Database",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "backup",
+        "DB=${input:database}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: Export zh_CN",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "i18n-export",
+        "MODULE=${input:module}",
+        "LANG=zh_CN"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Odoo: List Custom Modules",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "list-modules"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "database",
+      "type": "pickString",
+      "description": "Odoo 数据库",
+      "options": [
+        "Goody",
+        "demo",
+        "Template"
+      ],
+      "default": "Goody"
+    },
+    {
+      "id": "module",
+      "type": "promptString",
+      "description": "模块技术名（例如 custom_demo）",
+      "default": "custom_demo"
+    },
+    {
+      "id": "newModule",
+      "type": "promptString",
+      "description": "新模块技术名（小写字母/数字/下划线）",
+      "default": "custom_new"
+    },
+    {
+      "id": "kind",
+      "type": "pickString",
+      "description": "模块类型",
+      "options": [
+        "extension",
+        "model"
+      ],
+      "default": "extension"
+    }
+  ]
+}

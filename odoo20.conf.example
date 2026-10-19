@@ -1,0 +1,12 @@
+[options]
+; Odoo database master password (used by the database manager).
+; Replace this placeholder before using the file. Never commit the real value.
+admin_passwd = change-me
+
+; Unix socket connection through peer authentication.
+; Omit db_host/db_port/db_password: Odoo treats the literal "False" as a
+; non-boolean value and logs a warning.
+db_user = odoo
+
+; Core/enterprise addons are merged under odoo/addons in Odoo 20.
+addons_path = /opt/odoo20/odoo/addons,/opt/odoo20/custom,/opt/odoo20/oca,/opt/odoo20/app3,/opt/odoo20/web

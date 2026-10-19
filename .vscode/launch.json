@@ -1,0 +1,114 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Odoo: Run (dev=xml)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/odoo-venv/bin/python",
+      "program": "${workspaceFolder}/odoo-bin",
+      "args": [
+        "server",
+        "-c",
+        "${workspaceFolder}/odoo20.conf",
+        "-d",
+        "${input:database}",
+        "--dev=xml",
+        "--http-port=8069"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "ODOO_RC": "${workspaceFolder}/odoo20.conf"
+      }
+    },
+    {
+      "name": "Odoo: Run (dev=all)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/odoo-venv/bin/python",
+      "program": "${workspaceFolder}/odoo-bin",
+      "args": [
+        "server",
+        "-c",
+        "${workspaceFolder}/odoo20.conf",
+        "-d",
+        "${input:database}",
+        "--dev=all",
+        "--http-port=8069"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "ODOO_RC": "${workspaceFolder}/odoo20.conf"
+      }
+    },
+    {
+      "name": "Odoo: Test Module",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/odoo-venv/bin/python",
+      "program": "${workspaceFolder}/odoo-bin",
+      "args": [
+        "server",
+        "-c",
+        "${workspaceFolder}/odoo20.conf",
+        "-d",
+        "${input:database}",
+        "-u",
+        "${input:module}",
+        "--test-tags",
+        "/${input:module}",
+        "--stop-after-init",
+        "--no-http"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "ODOO_RC": "${workspaceFolder}/odoo20.conf"
+      }
+    },
+    {
+      "name": "Odoo: Shell",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/odoo-venv/bin/python",
+      "program": "${workspaceFolder}/odoo-bin",
+      "args": [
+        "shell",
+        "-c",
+        "${workspaceFolder}/odoo20.conf",
+        "-d",
+        "${input:database}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "ODOO_RC": "${workspaceFolder}/odoo20.conf"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "database",
+      "type": "pickString",
+      "description": "Odoo 数据库",
+      "options": [
+        "Goody",
+        "demo",
+        "Template"
+      ],
+      "default": "Goody"
+    },
+    {
+      "id": "module",
+      "type": "promptString",
+      "description": "模块技术名（例如 custom_demo）",
+      "default": "custom_demo"
+    }
+  ]
+}

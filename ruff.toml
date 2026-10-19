@@ -1,0 +1,30 @@
+target-version = "py312"
+line-length = 120
+
+exclude = [
+    "odoo",
+    "odoo-venv",
+    "oca",
+    "app3",
+    "web",
+    "backups",
+    ".git",
+    "__pycache__",
+    ".ruff_cache",
+]
+
+[lint]
+select = ["E", "F", "W", "I", "B"]
+
+[lint.per-file-ignores]
+# Odoo uses __init__.py imports for module registration.
+"__init__.py" = ["F401"]
+"migrations/*" = ["F401"]
+
+[lint.isort]
+known-first-party = ["odoo"]
+
+[format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "lf"

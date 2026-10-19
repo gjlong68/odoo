@@ -1,0 +1,36 @@
+# Odoo upstream source and runtime
+/odoo/
+/odoo-venv/
+/odoo.egg-info/
+/setup/
+/doc/
+/odoo-bin
+/setup.py
+/setup.cfg
+/requirements.txt
+/MANIFEST.in
+/PKG-INFO
+/LICENSE
+/README.md
+
+# Third-party addons (use submodules or a separate repository)
+/oca/
+
+# Local configuration and secrets
+/odoo20.conf
+/.env
+
+# Backups, caches and logs
+/backups/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+*.log
+
+# Claude Code local state
+.claude/settings.local.json
+CLAUDE.local.md
+
+# OS / editor
+.DS_Store

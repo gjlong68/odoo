@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="privilege_{{MODULE}}" model="res.groups.privilege">
+        <field name="name">{{TITLE}}</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="group_{{MODULE}}_user" model="res.groups">
+        <field name="name">{{TITLE}} / User</field>
+        <field name="privilege_id" ref="privilege_{{MODULE}}"/>
+    </record>
+
+    <record id="group_{{MODULE}}_manager" model="res.groups">
+        <field name="name">{{TITLE}} / Manager</field>
+        <field name="privilege_id" ref="privilege_{{MODULE}}"/>
+        <field name="implied_ids" eval="[(4, ref('group_{{MODULE}}_user'))]"/>
+    </record>
+</odoo>

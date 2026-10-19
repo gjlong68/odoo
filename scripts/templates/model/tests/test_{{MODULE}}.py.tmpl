@@ -1,0 +1,8 @@
+from odoo.tests import TransactionCase, tagged
+
+
+@tagged('post_install', '-at_install')
+class Test{{CLASS}}(TransactionCase):
+    def test_create_{{ENTITY}}(self):
+        record = self.env['{{MODULE}}.{{ENTITY}}'].create({'name': 'Test record'})
+        self.assertEqual(record.name, 'Test record')
