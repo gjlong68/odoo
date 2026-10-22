@@ -1,0 +1,2 @@
+id,name,model_id,group_id/id,operation,domain
+access_zd_stock_report_pivot_inventory_at_date_manager,access.zd_stock_report_pivot.inventory_at_date.manager,zd_stock_report_pivot.inventory_at_date,stock.group_stock_manager,crud,

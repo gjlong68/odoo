@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_inventory_at_date_form" model="ir.ui.view">
+        <field name="name">zd_stock_report_pivot.inventory_at_date.form</field>
+        <field name="model">zd_stock_report_pivot.inventory_at_date</field>
+        <field name="arch" type="xml">
+            <form string="Inventory at Date">
+                <p class="text-muted">
+                    Stock quantities are computed at the end of the selected date.
+                </p>
+                <group>
+                    <field name="date"/>
+                </group>
+                <footer>
+                    <button name="action_open_inventory_at_date" string="Open Inventory"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_inventory_at_date" model="ir.actions.act_window">
+        <field name="name">Inventory at Date</field>
+        <field name="res_model">zd_stock_report_pivot.inventory_at_date</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_inventory_at_date_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_inventory_at_date" name="Inventory at Date"
+              parent="stock.menu_warehouse_report"
+              action="action_inventory_at_date" sequence="10"/>
+
+</odoo>
