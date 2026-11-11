@@ -7,13 +7,26 @@
         <field name="arch" type="xml">
             <pivot string="Stock" sample="1">
                 <field name="categ_id" type="row"/>
-                <field name="product_tmpl_id" type="row"/>
+                <field name="id" type="row"/>
                 <field name="qty_available" type="measure" string="On Hand"/>
+                <field name="amount" type="measure" string="Amount"/>
                 <field name="free_qty" type="measure" string="Free to Use"/>
                 <field name="incoming_qty" type="measure" string="Incoming"/>
                 <field name="outgoing_qty" type="measure" string="Outgoing"/>
                 <field name="virtual_available" type="measure" string="Forecasted"/>
             </pivot>
+        </field>
+    </record>
+
+    <record id="product_search_form_view_stock_report_variant" model="ir.ui.view">
+        <field name="name">product.product.search.stock.report.variant</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_search_form_view_stock_report"/>
+        <field name="arch" type="xml">
+            <filter name="group_by_product_tmpl_id" position="after">
+                <filter string="Product Variant" name="group_by_product_variant"
+                        context="{'group_by': 'id'}"/>
+            </filter>
         </field>
     </record>
 

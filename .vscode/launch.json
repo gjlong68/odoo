@@ -99,6 +99,7 @@
       "description": "Odoo 数据库",
       "options": [
         "Goody",
+        "Goody2",
         "demo",
         "Template"
       ],

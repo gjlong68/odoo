@@ -24,3 +24,14 @@ class InventoryAtDate(models.TransientModel):
         context['to_date'] = self.date.strftime('%Y-%m-%d')
         action['context'] = context
         return action
+
+    def action_open_stock_by_company(self):
+        self.ensure_one()
+        action = self.env['ir.actions.act_window']._for_xml_id(
+            'zd_stock_report_pivot.action_stock_company_report')
+        action['name'] = self.env._('Stock by Company: %(date)s', date=self.date)
+        context = safe_eval(action.get('context') or '{}')
+        # The report forwards to_date to the core quantity computation.
+        context['to_date'] = self.date.strftime('%Y-%m-%d')
+        action['context'] = context
+        return action

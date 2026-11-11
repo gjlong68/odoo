@@ -26,12 +26,14 @@ class TestStockReportPivot(TransactionCase):
             'type': 'consu',
             'is_storable': True,
             'categ_id': cls.category.id,
+            'standard_price': 10.0,
         })
         cls.product_2 = cls.env['product.product'].create({
             'name': 'ZD Pivot Product 2',
             'type': 'consu',
             'is_storable': True,
             'categ_id': cls.category.id,
+            'standard_price': 20.0,
         })
         warehouse = cls.env['stock.warehouse'].search(
             [('company_id', '=', cls.env.company.id)], limit=1)
@@ -39,7 +41,8 @@ class TestStockReportPivot(TransactionCase):
         quant_model = cls.env['stock.quant']
         quant_model._update_available_quantity(cls.product_1, cls.location, 5.0)
         quant_model._update_available_quantity(cls.product_2, cls.location, 7.0)
-        (cls.product_1 | cls.product_2).invalidate_recordset(list(cls.QUANTITY_FIELDS))
+        (cls.product_1 | cls.product_2).invalidate_recordset(
+            list(cls.QUANTITY_FIELDS) + ['amount'])
 
     def test_pivot_view_and_action(self):
         view = self.env.ref('zd_stock_report_pivot.product_product_stock_pivot')
@@ -50,6 +53,11 @@ class TestStockReportPivot(TransactionCase):
             self.env['ir.ui.view'].default_view('product.product', 'pivot'),
             view.id,
         )
+        self.assertIn('name="id" type="row"', view.arch)
+        self.assertIn('name="amount" type="measure"', view.arch)
+        variant_group = self.env.ref(
+            'zd_stock_report_pivot.product_search_form_view_stock_report_variant')
+        self.assertIn("'group_by': 'id'", variant_group.arch)
         action = self.env.ref('stock.action_product_stock_view')
         self.assertIn('pivot', action.view_mode.split(','))
         self.assertTrue(any(pair[1] == 'pivot' for pair in action.views))
@@ -64,6 +72,18 @@ class TestStockReportPivot(TransactionCase):
         category, quantity = groups[0]
         self.assertEqual(category, self.category)
         self.assertAlmostEqual(quantity, 12.0)
+
+    def test_read_group_amount(self):
+        groups = self.env['product.product']._read_group(
+            [('id', 'in', (self.product_1 | self.product_2).ids)],
+            ['categ_id'],
+            ['amount:sum'],
+        )
+        self.assertEqual(len(groups), 1)
+        category, amount = groups[0]
+        self.assertEqual(category, self.category)
+        # 5 * 10 + 7 * 20
+        self.assertAlmostEqual(amount, 190.0)
 
     def test_formatted_grouping_sets(self):
         aggregates = [f'{field}:sum' for field in self.QUANTITY_FIELDS]

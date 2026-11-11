@@ -1,1 +1,1 @@
-from . import test_balance_tag_domain
+from . import test_account_balance_domain

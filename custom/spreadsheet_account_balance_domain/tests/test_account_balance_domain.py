@@ -7,7 +7,7 @@ from odoo.tests import tagged
 
 
 @tagged("post_install", "-at_install")
-class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
+class SpreadsheetAccountBalanceDomainFunctionTest(AccountTestInvoicingCommon):
     _test_user_groups = None  # FIXME list needed groups
 
     @classmethod
@@ -17,6 +17,10 @@ class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
         cls.tag_1 = cls._create_account_tag("tag_1")
         cls.tag_2 = cls._create_account_tag("tag_2")
         cls.tag_3 = cls._create_account_tag("tag_3")
+        cls.tax_tag = cls.env["account.account.tag"].create([{
+            "name": "+TEST_BALANCE_DOMAIN",
+            "applicability": "taxes",
+        }])
 
         cls.company_data["default_account_receivable"].tag_ids |= cls.tag_1
         cls.company_data["default_account_revenue"].tag_ids |= cls.tag_1
@@ -100,21 +104,101 @@ class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
         move.action_post()
         return move
 
+    def _create_extra_receivable_line(self):
+        """Posted 2025 receivable debit of 25, named 'extra line'."""
+        move = self.env["account.move"].create({
+            "company_id": self.company_data["company"].id,
+            "move_type": "entry",
+            "date": "2025-02-01",
+            "line_ids": [
+                Command.create({
+                    "name": "extra line",
+                    "account_id": self.company_data["default_account_receivable"].id,
+                    "debit": 25,
+                    "company_id": self.company_data["company"].id,
+                }),
+                Command.create({
+                    "name": "extra line credit",
+                    "account_id": self.company_data["default_account_expense"].id,
+                    "credit": 25,
+                    "company_id": self.company_data["company"].id,
+                }),
+            ],
+        })
+        move.action_post()
+        return move
+
+    def _create_tax_tagged_move(self):
+        """Posted 2025 move with tax tags on the receivable and expense lines."""
+        move = self.env["account.move"].create({
+            "company_id": self.company_data["company"].id,
+            "move_type": "entry",
+            "date": "2025-03-01",
+            "line_ids": [
+                Command.create({
+                    "name": "tax tagged debit",
+                    "account_id": self.company_data["default_account_receivable"].id,
+                    "debit": 80,
+                    "tax_tag_ids": [Command.set(self.tax_tag.ids)],
+                    "company_id": self.company_data["company"].id,
+                }),
+                Command.create({
+                    "name": "tax tagged credit",
+                    "account_id": self.company_data["default_account_expense"].id,
+                    "credit": 30,
+                    "tax_tag_ids": [Command.set(self.tax_tag.ids)],
+                    "company_id": self.company_data["company"].id,
+                }),
+                Command.create({
+                    "name": "untagged balancing credit",
+                    "account_id": self.company_data["default_account_expense"].id,
+                    "credit": 50,
+                    "company_id": self.company_data["company"].id,
+                }),
+            ],
+        })
+        move.action_post()
+        return move
+
+    # ------------------------------------------------------------------
+    # ODOO.BALANCE.TAG helpers
+    # ------------------------------------------------------------------
+
     def _args(self, tag_ids=None, date_range=None, company_id=None,
-              include_unposted=False, domain=None):
+              include_unposted=False, domain=None, tax_tag_ids=None):
         return {
             "date_range": date_range or {"range_type": "year", "year": 2025},
             "account_tag_ids": tag_ids or [],
             "company_id": company_id,
             "include_unposted": include_unposted,
             "domain": domain,
+            "tax_tag_ids": tax_tag_ids or [],
         }
 
     def _call(self, *args_list):
         return self.env["account.account"].spreadsheet_fetch_balance_tag(list(args_list))
 
     # ------------------------------------------------------------------
-    # Base behaviour
+    # ODOO.BALANCE helpers
+    # ------------------------------------------------------------------
+
+    def _debit_credit_args(self, codes, date_range=None, company_id=None,
+                           include_unposted=False, domain=None):
+        return {
+            "date_range": date_range or {"range_type": "year", "year": 2025},
+            "codes": codes,
+            "company_id": company_id,
+            "include_unposted": include_unposted,
+            "domain": domain,
+        }
+
+    def _call_debit_credit(self, *args_list):
+        return self.env["account.account"].spreadsheet_fetch_debit_credit(
+            list(args_list)
+        )
+
+    # ------------------------------------------------------------------
+    # ODOO.BALANCE.TAG: base behaviour
     # ------------------------------------------------------------------
 
     def test_empty_payload(self):
@@ -156,7 +240,7 @@ class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
         self.assertEqual(result, [{"balance": 0}])
 
     # ------------------------------------------------------------------
-    # Date semantics
+    # ODOO.BALANCE.TAG: date semantics
     # ------------------------------------------------------------------
 
     def test_period_excludes_prior_year_for_all_account_types(self):
@@ -200,7 +284,7 @@ class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
         self.assertEqual(day_result, [{"balance": 350.0}])
 
     # ------------------------------------------------------------------
-    # Extra domain
+    # ODOO.BALANCE.TAG: extra domain
     # ------------------------------------------------------------------
 
     def test_extra_domain_filter_by_name(self):
@@ -308,3 +392,164 @@ class SpreadsheetBalanceTagDomainFunctionTest(AccountTestInvoicingCommon):
     def test_empty_tags_with_invalid_domain_returns_zero(self):
         result = self._call(self._args(tag_ids=[], domain="not json"))
         self.assertEqual(result, [{"balance": 0}])
+
+    # ------------------------------------------------------------------
+    # ODOO.BALANCE.TAG: tax tags
+    # ------------------------------------------------------------------
+
+    def test_tax_tag_only_filters_all_accounts(self):
+        """Tax tags can be used without any account tag."""
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(tag_ids=[], tax_tag_ids=self.tax_tag.ids)
+        )
+        # receivable debit 80 + expense credit 30
+        self.assertEqual(result, [{"balance": 50.0}])
+
+    def test_tax_tag_combined_with_account_tag(self):
+        """Account tags and tax tags are ANDed."""
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(
+                tag_ids=self.tag_1.ids,
+                tax_tag_ids=self.tax_tag.ids,
+            )
+        )
+        # tag_1 matches the receivable line (80); the expense line (30) is tag_2
+        self.assertEqual(result, [{"balance": 80.0}])
+
+    def test_tax_tag_only_respects_period_semantics(self):
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(
+                tag_ids=[],
+                date_range={"range_type": "year", "year": 2024},
+                tax_tag_ids=self.tax_tag.ids,
+            )
+        )
+        self.assertEqual(result, [{"balance": 0.0}])
+
+    def test_tax_tag_with_extra_domain(self):
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(
+                tag_ids=[],
+                tax_tag_ids=self.tax_tag.ids,
+                domain=[("debit", ">", 50)],
+            )
+        )
+        self.assertEqual(result, [{"balance": 80.0}])
+
+    def test_tax_tag_unknown_returns_zero(self):
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(tag_ids=[], tax_tag_ids=[999999])
+        )
+        self.assertEqual(result, [{"balance": 0.0}])
+
+    def test_tax_tag_empty_behaves_like_core(self):
+        self._create_tax_tagged_move()
+        result = self._call(self._args(tag_ids=[], tax_tag_ids=[]))
+        self.assertEqual(result, [{"balance": 0}])
+
+    def test_tax_tag_batch(self):
+        self._create_tax_tagged_move()
+        result = self._call(
+            self._args(tag_ids=[], tax_tag_ids=self.tax_tag.ids),
+            self._args(
+                tag_ids=self.tag_1.ids,
+                tax_tag_ids=self.tax_tag.ids,
+            ),
+        )
+        self.assertEqual(result, [{"balance": 50.0}, {"balance": 80.0}])
+
+    # ------------------------------------------------------------------
+    # ODOO.BALANCE
+    # ------------------------------------------------------------------
+
+    def test_balance_without_domain_keeps_core_semantics(self):
+        """Balance-sheet accounts include prior-year lines up to period end."""
+        self._create_prior_year_move()
+        result = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[self.company_data["default_account_receivable"].code]
+            )
+        )
+        self.assertEqual(result, [{"debit": 300.0, "credit": 0.0}])
+
+    def test_balance_domain_filters_lines(self):
+        self._create_extra_receivable_line()
+        code = self.company_data["default_account_receivable"].code
+
+        without_domain = self._call_debit_credit(
+            self._debit_credit_args(codes=[code])
+        )
+        by_name = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[code],
+                domain=[("name", "ilike", "extra line")],
+            )
+        )
+        by_amount = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[code],
+                domain=[("debit", ">", 60)],
+            )
+        )
+
+        self.assertEqual(without_domain, [{"debit": 125.0, "credit": 0.0}])
+        self.assertEqual(by_name, [{"debit": 25.0, "credit": 0.0}])
+        self.assertEqual(by_amount, [{"debit": 100.0, "credit": 0.0}])
+
+    def test_balance_domain_json_string(self):
+        self._create_extra_receivable_line()
+        code = self.company_data["default_account_receivable"].code
+        result = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[code],
+                domain='[["debit", ">", 60]]',
+            )
+        )
+        self.assertEqual(result, [{"debit": 100.0, "credit": 0.0}])
+
+    def test_balance_domain_narrows_opening_balance(self):
+        self._create_prior_year_move()
+        code = self.company_data["default_account_receivable"].code
+        result = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[code],
+                domain=[("date", ">=", "2025-01-01")],
+            )
+        )
+        self.assertEqual(result, [{"debit": 100.0, "credit": 0.0}])
+
+    def test_balance_domain_cannot_bypass_company(self):
+        company = self.company_data["company"]
+        code = self.company_data["default_account_receivable"].code
+        result = self._call_debit_credit(
+            self._debit_credit_args(
+                codes=[code],
+                company_id=company.id,
+                domain=[("company_id", "!=", company.id)],
+            )
+        )
+        self.assertEqual(result, [{"debit": 0, "credit": 0}])
+
+    def test_balance_invalid_domain_returns_error(self):
+        code = self.company_data["default_account_receivable"].code
+        result = self._call_debit_credit(
+            self._debit_credit_args(codes=[code], domain="not json")
+        )
+        self.assertIn("__error__", result[0])
+
+    def test_balance_batch_isolation(self):
+        code = self.company_data["default_account_receivable"].code
+        result = self._call_debit_credit(
+            self._debit_credit_args(codes=[code], domain="not json"),
+            self._debit_credit_args(
+                codes=[code],
+                domain=[("debit", ">", 60)],
+            ),
+        )
+        self.assertIn("__error__", result[0])
+        self.assertEqual(result[1], {"debit": 100.0, "credit": 0.0})

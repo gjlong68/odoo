@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_company_report_pivot" model="ir.ui.view">
+        <field name="name">zd_stock_report_pivot.stock_company_report.pivot</field>
+        <field name="model">zd_stock_report_pivot.stock_company_report</field>
+        <field name="arch" type="xml">
+            <pivot string="Stock by Company" sample="1">
+                <field name="company_id" type="row" groups="base.group_multi_company"/>
+                <field name="categ_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="qty_available" type="measure" string="On Hand"/>
+                <field name="amount" type="measure" string="Amount"/>
+                <field name="free_qty" type="measure" string="Free to Use"/>
+                <field name="incoming_qty" type="measure" string="Incoming"/>
+                <field name="outgoing_qty" type="measure" string="Outgoing"/>
+                <field name="virtual_available" type="measure" string="Forecasted"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="stock_company_report_list" model="ir.ui.view">
+        <field name="name">zd_stock_report_pivot.stock_company_report.list</field>
+        <field name="model">zd_stock_report_pivot.stock_company_report</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false" duplicate="false">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="categ_id"/>
+                <field name="product_id"/>
+                <field name="qty_available" sum="Total On Hand"/>
+                <field name="amount" sum="Total Amount"/>
+                <field name="free_qty" sum="Total Free to Use"/>
+                <field name="incoming_qty" sum="Total Incoming"/>
+                <field name="outgoing_qty" sum="Total Outgoing"/>
+                <field name="virtual_available" sum="Total Forecasted"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="stock_company_report_search" model="ir.ui.view">
+        <field name="name">zd_stock_report_pivot.stock_company_report.search</field>
+        <field name="model">zd_stock_report_pivot.stock_company_report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="categ_id" filter_domain="[('categ_id', 'child_of', raw_value)]"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <group>
+                    <filter string="Company" name="group_by_company"
+                            context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                    <filter string="Product Category" name="group_by_categ_id"
+                            context="{'group_by': 'categ_id'}"/>
+                    <filter string="Product" name="group_by_product"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter string="Product Template" name="group_by_product_tmpl"
+                            context="{'group_by': 'product_tmpl_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_company_report" model="ir.actions.act_window">
+        <field name="name">Stock by Company</field>
+        <field name="res_model">zd_stock_report_pivot.stock_company_report</field>
+        <field name="view_mode">pivot,list</field>
+    </record>
+
+    <menuitem id="menu_stock_company_report" name="Stock by Company"
+              parent="stock.menu_warehouse_report"
+              action="action_stock_company_report" sequence="6"
+              groups="stock.group_stock_user"/>
+
+</odoo>

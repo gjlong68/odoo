@@ -1,0 +1,163 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zd_goods_in_transit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20261021\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 12:53+0000\n"
+"PO-Revision-Date: 2026-11-06 12:53+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zd_goods_in_transit
+#: model:ir.module.module,description:base.module_zd_goods_in_transit
+msgid ""
+"\n"
+"Posts sale-order deliveries of real-time-valued products to a Goods in Transit\n"
+"account (Dr Goods in Transit / Cr Stock Valuation), routes invoice COGS through\n"
+"transit (Dr COGS / Cr Goods in Transit), and reverses both on returns and credit\n"
+"notes. Periodic-valuation products and native stock valuation are unchanged.\n"
+msgstr ""
+"将 real_time（永续/开票时结转）估值的销售订单交货记入发出商品科目"
+"（借 发出商品 / 贷 库存商品），发票 COGS 通过发出商品结转"
+"（借 销售成本 / 贷 发出商品），退货和红冲做反向处理。"
+"periodic 产品与原生库存估值逻辑不变。\n"
+
+#. module: zd_goods_in_transit
+#: model:ir.model.fields,help:zd_goods_in_transit.field_product_category__property_stock_account_transit_id
+msgid ""
+"Account holding the cost of goods delivered to customers but not yet "
+"invoiced. Used for sale-order deliveries and for the COGS of real-time-"
+"valued products. Leave empty to use the company default."
+msgstr ""
+"用于归集已交付给客户但尚未开票的商品成本。适用于销售订单交货及"
+"real_time 估值产品的 COGS。留空时使用公司默认值。"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_res_company
+msgid "Company"
+msgstr "公司"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_res_config_settings
+msgid "Config Settings"
+msgstr "配置设置"
+
+#. module: zd_goods_in_transit
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_account_move__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_category__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_template__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_company__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_stock_move__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: zd_goods_in_transit
+#: model:ir.module.module,shortdesc:base.module_zd_goods_in_transit
+msgid "Goods in Transit"
+msgstr "发出商品"
+
+#. module: zd_goods_in_transit
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_category__property_stock_account_transit_id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_company__account_stock_transit_id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_config_settings__stock_transit_account_id
+#: model_terms:ir.ui.view,arch_db:zd_goods_in_transit.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:zd_goods_in_transit.view_category_property_form
+msgid "Goods in Transit Account"
+msgstr "发出商品科目"
+
+#. module: zd_goods_in_transit
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_category__property_stock_account_transit_active
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_config_settings__stock_transit_account_active
+msgid "Goods in Transit Account Active"
+msgstr "发出商品科目有效"
+
+#. module: zd_goods_in_transit
+#: model:ir.module.module,summary:base.module_zd_goods_in_transit
+msgid ""
+"Goods in Transit accounting for sale deliveries, invoices, returns and "
+"refunds"
+msgstr "销售交货、发票、退货与红冲的发出商品会计"
+
+#. module: zd_goods_in_transit
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_account_move__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_account_move_line__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_category__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_product_template__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_company__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_res_config_settings__id
+#: model:ir.model.fields,field_description:zd_goods_in_transit.field_stock_move__id
+msgid "ID"
+msgstr ""
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_account_move
+msgid "Journal Entry"
+msgstr "日记账分录"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_account_move_line
+msgid "Journal Item"
+msgstr "日记账项目"
+
+#. module: zd_goods_in_transit
+#. odoo-python
+#: code:addons/zd_goods_in_transit/models/product_template.py:0
+msgid ""
+"No Goods in Transit account is configured for product %s (category: %s). Set"
+" it on the product category or in Accounting settings > Inventory Valuation."
+msgstr ""
+"产品 %s（类别：%s）未配置发出商品科目。请在产品类别或"
+"“会计设置 > 库存估值”中设置。"
+
+#. module: zd_goods_in_transit
+#. odoo-python
+#: code:addons/zd_goods_in_transit/models/stock_move.py:0
+msgid ""
+"No Stock Journal is configured for company %s. Configure it in Accounting "
+"settings > Inventory Valuation."
+msgstr ""
+"公司 %s 未配置库存日记账。请在“会计设置 > 库存估值”中配置。"
+
+#. module: zd_goods_in_transit
+#. odoo-python
+#: code:addons/zd_goods_in_transit/models/product_template.py:0
+msgid "No Stock Valuation account is configured for product %s."
+msgstr "产品 %s 未配置库存商品科目。"
+
+#. module: zd_goods_in_transit
+#. odoo-python
+#: code:addons/zd_goods_in_transit/models/product_template.py:0
+msgid "None"
+msgstr "无"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_product_template
+msgid "Product"
+msgstr "产品"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_product_category
+msgid "Product Category"
+msgstr "产品类别"
+
+#. module: zd_goods_in_transit
+#: model:ir.model,name:zd_goods_in_transit.model_stock_move
+msgid "Stock Move"
+msgstr "库存移动"
+
+#. module: zd_goods_in_transit
+#. odoo-python
+#: code:addons/zd_goods_in_transit/models/product_template.py:0
+msgid ""
+"The Goods in Transit account must differ from the Stock Valuation account "
+"for product %s."
+msgstr "产品 %s 的发出商品科目不能与库存商品科目相同。"

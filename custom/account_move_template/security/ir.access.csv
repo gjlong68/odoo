@@ -1,0 +1,6 @@
+id,name,model_id,group_id/id,operation,domain
+access_account_move_template_user,account.move.template full access,account.move.template,account.group_account_user,crud,
+access_account_move_template_line_user,account.move.template.line full access,account.move.template.line,account.group_account_user,crud,
+access_account_move_template_run_user,account.move.template.run full access,account.move.template.run,account.group_account_user,crud,
+access_account_move_template_line_run_user,account.move.template.line.run full access,account.move.template.line.run,account.group_account_user,crud,
+account_move_template_comp_rule,account.move.template multi-company,account.move.template,,crud,"[('company_id', 'in', company_ids)]"

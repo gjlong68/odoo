@@ -15,6 +15,8 @@
                 <footer>
                     <button name="action_open_inventory_at_date" string="Open Inventory"
                             type="object" class="btn-primary"/>
+                    <button name="action_open_stock_by_company" string="Open Stock by Company"
+                            type="object" class="btn-secondary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

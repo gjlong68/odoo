@@ -23,7 +23,9 @@ ROOT = Path(__file__).resolve().parent.parent
 ADDON_DIRS = ("custom", "oca", "app3", "web")
 CORE_ADDONS = ROOT / "odoo" / "addons"
 NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
-MODEL_RE = re.compile(r"^[a-z0-9_]+\.[a-z0-9_]+$")
+# Odoo model names may contain several dots (e.g. "account.move.template"),
+# not only the "module.model" pattern used by module-prefixed custom models.
+MODEL_RE = re.compile(r"^[a-z0-9_]+(?:\.[a-z0-9_]+)+$")
 XMLID_RE = re.compile(r"^[a-z0-9_]+\.[a-z0-9_]+$")
 VERSION_RE = re.compile(r"^20\.0\.\d+\.\d+\.\d+$")
 ALLOWED_LICENSES = {

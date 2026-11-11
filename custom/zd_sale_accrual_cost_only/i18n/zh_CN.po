@@ -1,0 +1,84 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zd_sale_accrual_cost_only
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0+e-20261021\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-09 04:07+0000\n"
+"PO-Revision-Date: 2026-11-09 04:07+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.module.module,description:base.module_zd_sale_accrual_cost_only
+msgid ""
+"\n"
+"Sales Accrual Cost Only\n"
+"=======================\n"
+"\n"
+"Odoo's accrued-orders wizard posts two pairs of journal items for a sale\n"
+"order line whose delivered and invoiced quantities differ:\n"
+"\n"
+"* revenue: ``Dr Invoices to be Issued / Cr Income``;\n"
+"* cost: ``Dr Expense / Cr Stock Valuation``.\n"
+"\n"
+"This module keeps only the cost side and posts it as a balance-sheet\n"
+"reclassification between the \"Invoices to be Issued\" account and the stock\n"
+"valuation account (``Dr Invoices to be Issued / Cr Stock Valuation``).  The\n"
+"automatic reversal created by the wizard mirrors those two lines.\n"
+"\n"
+"All sale lines are affected: periodic-valued products and services no longer\n"
+"produce a revenue accrual (they have no cost side to reclassify).  Purchase\n"
+"accruals are unchanged.\n"
+msgstr ""
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.model,name:zd_sale_accrual_cost_only.model_account_accrued_orders_wizard
+msgid "Accrued Orders Wizard"
+msgstr "应计订单向导"
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.model.fields,field_description:zd_sale_accrual_cost_only.field_account_accrued_orders_wizard__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.model.fields,field_description:zd_sale_accrual_cost_only.field_account_accrued_orders_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.module.module,summary:base.module_zd_sale_accrual_cost_only
+msgid "Post only the cost side of delivered-not-invoiced sales accruals"
+msgstr "销售发货应计只生成成本分录"
+
+#. module: zd_sale_accrual_cost_only
+#: model:ir.module.module,shortdesc:base.module_zd_sale_accrual_cost_only
+msgid "Sales Accrual Cost Only"
+msgstr "销售应计只记成本"
+
+#. module: zd_sale_accrual_cost_only
+#. odoo-python
+#: code:addons/zd_sale_accrual_cost_only/models/account_accrued_orders_wizard.py:0
+msgid ""
+"Sales accruals cannot use a manual amount. Select the sale order lines and "
+"let the accrual be computed from the delivered and invoiced quantities."
+msgstr ""
+"销售应计不支持手动金额。请选择销售订单行，由系统按已发货和已开票数量自动"
+"计算应计金额。"
+
+#. module: zd_sale_accrual_cost_only
+#. odoo-python
+#: code:addons/zd_sale_accrual_cost_only/models/account_accrued_orders_wizard.py:0
+msgid ""
+"The selected sale order line mirrors an intercompany purchase return. Its "
+"cost is accrued on the purchase side, so no sales accrual is needed."
+msgstr ""
+"所选销售订单行是公司间采购退货的镜像行，其成本已在采购侧计提，因此无需再生成"
+"销售应计。"
